@@ -4,7 +4,6 @@ class Product {
     this._weight = weight;
     this._price = price;
     this._productRatings = [];
-    this._productNumber = 1000;
     this._inStock = true;
   }
   get name(){
@@ -19,9 +18,6 @@ class Product {
   get productRatings(){
     return this._productRatings;
   }
-  get productNumber(){
-    return this._productNumber;
-  }
   get inStock(){
     return this._inStock;
   }
@@ -31,6 +27,11 @@ class Product {
   set inStock(status){
     return this._inStock = status;
   }
+  outputStockStatus(){
+    if (this._inStock === true) {
+      return `in stock`;
+    } else { return `not in stock`}
+  }
   getAverageRating(){
     let ratingSum = this.productRatings.reduce((acc, val) =>
       acc + val, 0) / this._productRatings.length;
@@ -39,18 +40,29 @@ class Product {
   addProductRatings(newRating){
     this._productRatings.push(newRating);
   }
-  generateProductNumber(){
-    let randomNumber = Math.floor(Math.random() * 2999) + 1111;
-    this._productNumber+= randomNumber;
-  }
 }
 
 // Testing the superclass
 const newProduct = new Product("product", 33, 45);
-console.log(`${newProduct.name} is ${newProduct.weight}kg and costs $${newProduct.price}.`);
-// newProduct.toggleInStockStatus();
+newProduct.toggleInStockStatus();
+console.log(`${newProduct.name} is ${newProduct.weight}kg, costs $${newProduct.price} and is ${newProduct.outputStockStatus()}.`);
 console.log(newProduct.inStock);
-newProduct.addProductRatings(1, 3, 4, 2, 0);
+newProduct.addProductRatings(1);
+newProduct.addProductRatings(4);
+newProduct.addProductRatings(4);
+newProduct.addProductRatings(3);
 console.log(newProduct.productRatings);
 console.log(newProduct.getAverageRating());
-console.log(newProduct.generateProductNumber());
+
+class Lighting extends Product {
+  constructor(name, weight, price, energyClass) {
+    super(name, weight, price);
+    this._energyClass = energyClass;
+  }
+  get energyClass(){
+    return this._energyClass;
+  }
+}
+
+const stockholmLamp = new Lighting("Stockholm", 10, 42, "A++");
+console.log(`Check out the new high efficiency collection, featuring the ${stockholmLamp.name}. Only $${stockholmLamp.price} for a limited time. Currently ${stockholmLamp.outputStockStatus()}.`);
